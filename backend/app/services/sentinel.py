@@ -25,7 +25,7 @@ from app.services.colormap import index_to_png
 
 logger = logging.getLogger(__name__)
 
-PROCESS_API_URL = f"{settings.SENTINELHUB_BASE_URL}/api/v1/process"
+PROCESS_API_URL = "https://sh.dataspace.copernicus.eu/api/v1/process"
 STAC_SEARCH_URL = "https://catalogue.dataspace.copernicus.eu/stac/search"
 
 # ── Evalscripts ───────────────────────────────────────────────────────────────
@@ -166,7 +166,7 @@ async def fetch_band_data(
                 "properties": {"crs": "http://www.opengis.net/def/crs/EPSG/0/4326"},
             },
             "data": [{
-                "type": "sentinel-2-l2a",
+                "type": "S2L2A"
                 "dataFilter": {
                     "timeRange": {
                         "from": f"{start_date.isoformat()}T00:00:00Z",
