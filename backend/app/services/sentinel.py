@@ -170,25 +170,32 @@ async def fetch_band_data(
                 "dataFilter": {
                     "timeRange": {
                         "from": f"{start_date.isoformat()}T00:00:00Z",
-                        "to":   f"{end_date.isoformat()}T23:59:59Z",
+                        "to": f"{end_date.isoformat()}T23:59:59Z",
                     },
                     "mosaickingOrder": "leastCC",
                     "maxCloudCoverage": 30,
+                },
+                "processing": {
+                    "harmonizeValues": True,
                 },
             }],
         },
         "evalscript": evalscript,
         "output": {
-            "width":  width,
+            "width": width,
             "height": height,
             "responses": [{
                 "identifier": "default",
-                "format":     {"type": "image/tiff"},
+                "format": {"type": "image/tiff"},
             }],
         },
     }
 
-    headers = {**build_auth_headers(token), "Content-Type": "application/json"}
+    headers = {
+        **build_auth_headers(token),
+        "Content-Type": "application/json",
+        "Accept": "image/tiff",
+    }
     async with httpx.AsyncClient(timeout=60) as client:
         resp = await client.post(PROCESS_API_URL, json=payload, headers=headers)
         resp.raise_for_status()
