@@ -6,12 +6,14 @@
  * Convert a Leaflet LatLngBounds to a BoundingBox object.
  */
 export function leafletBoundsToBbox(bounds) {
-  return {
-    min_lon: bounds.getWest(),
-    min_lat: bounds.getSouth(),
-    max_lon: bounds.getEast(),
-    max_lat: bounds.getNorth(),
+  const bbox = {
+    min_lon: parseFloat(bounds.getWest().toFixed(6)),
+    min_lat: parseFloat(bounds.getSouth().toFixed(6)),
+    max_lon: parseFloat(bounds.getEast().toFixed(6)),
+    max_lat: parseFloat(bounds.getNorth().toFixed(6)),
   }
+  console.log('AOI bbox:', JSON.stringify(bbox))
+  return bbox
 }
 
 /**

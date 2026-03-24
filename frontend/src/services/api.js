@@ -28,7 +28,14 @@ api.interceptors.response.use(
 function buildAoi(aoi) {
   if (!aoi) return null
   if (aoi.type === 'bbox') {
-    return { bbox: aoi.data }
+    return {
+      bbox: {
+        min_lon: aoi.data.min_lon,
+        min_lat: aoi.data.min_lat,
+        max_lon: aoi.data.max_lon,
+        max_lat: aoi.data.max_lat,
+      }
+    }
   }
   return { geometry: aoi.data }
 }
