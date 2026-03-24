@@ -6,7 +6,7 @@ from datetime import date
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 # ── Enumerations ──────────────────────────────────────────────────────────────
@@ -62,12 +62,13 @@ class AOI(BaseModel):
     bbox: Optional[BoundingBox] = None
     geometry: Optional[GeoJSONGeometry] = None
 
-    @field_validator("geometry")
-    @classmethod
-    def bbox_or_geometry(cls, v, info):
-        if v is None and info.data.get("bbox") is None:
+    model_config = {"arbitrary_types_allowed": True}
+
+    @model_validator(mode="after")
+    def bbox_or_geometry_required(self):
+        if self.bbox is None and self.geometry is None:
             raise ValueError("Provide either bbox or geometry")
-        return v
+        return self
 
 
 # ── Request / Response models ─────────────────────────────────────────────────
