@@ -1,6 +1,7 @@
 # 🛰️ Sentinel-2 Vegetation Dashboard
 
-A full-stack, production-grade dashboard for visualizing and analyzing Sentinel-2 vegetation indices (NDVI, NDWI, EVI, SAVI, NDMI) over any user-defined area of interest.
+AI - author collaboration project to deploy a dashboard using S2 satellite imagery.
+A dashboard for visualizing and analyzing Sentinel-2 vegetation indices (NDVI, NDWI, EVI, SAVI, NDMI) over any user-defined area of interest.
 
 [![Deploy Frontend](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com)
 [![Deploy Backend](https://img.shields.io/badge/Deploy-Render-purple)](https://render.com)
