@@ -102,6 +102,8 @@ const EXAMPLE_BBOXES = [
   { label: 'Klenovec', value: '19.8,48.5,20.0,48.7' },
   { label: 'Bratislava', value: '17.0,48.2,17.2,48.0' },
   { label: 'Jasna', value: '48.8,19.5,49.0,19.7' },
+  { label: 'Groningen', value: '53.1,6.45,53.3,6.65' },
+  { label: 'Rimavska Sobota', value: '48.4,19.9,48.6,20.1' },
 ]
 
 const DrawIcon = () => (
