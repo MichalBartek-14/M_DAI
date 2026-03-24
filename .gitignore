@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+
+# Environment
+.env
+.env.local
+!.env.example
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Tile cache
+/tmp/sentinel_tile_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+*.pem
+*.key
+service-account*.json

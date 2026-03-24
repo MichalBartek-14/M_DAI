@@ -1,0 +1,107 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.indexToggles {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.toggle {
+  padding: 3px 9px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.04em;
+}
+.toggle:hover { border-color: var(--idx-color); color: var(--idx-color); }
+.toggleOn {
+  background: color-mix(in srgb, var(--idx-color) 12%, transparent);
+  border-color: var(--idx-color);
+  color: var(--idx-color);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.closeBtn:hover { color: var(--text-primary); background: var(--bg-panel); }
+
+.chartWrap {
+  flex: 1;
+  padding: 8px 8px 4px;
+  overflow: hidden;
+}
+
+.empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Recharts tooltip */
+.tooltip {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  font-size: 11px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+}
+
+.tooltipDate {
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.tooltipRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-display);
+  font-size: 11px;
+}
+
+.tooltipVal { font-weight: 700; }

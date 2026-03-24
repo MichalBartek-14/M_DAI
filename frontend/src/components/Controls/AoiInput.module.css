@@ -1,0 +1,137 @@
+.wrap { display: flex; flex-direction: column; gap: 8px; }
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: var(--bg-panel);
+  border: 1px dashed var(--border-bright);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.aoiCard {
+  background: var(--bg-panel);
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  padding: 10px;
+}
+
+.aoiHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.aoiType {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.clearBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 3px;
+  transition: var(--transition);
+}
+.clearBtn:hover { background: var(--danger); color: #fff; }
+
+.coords {
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--text-secondary);
+  word-break: break-all;
+}
+
+.area {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.inputRow {
+  display: flex;
+  gap: 6px;
+}
+
+.input {
+  flex: 1;
+  padding: 7px 9px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 10px;
+  outline: none;
+  transition: var(--transition);
+}
+.input:focus { border-color: var(--border-bright); }
+.input.inputError { border-color: var(--danger); }
+.input::placeholder { color: var(--text-muted); }
+
+.applyBtn {
+  padding: 7px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+.applyBtn:hover { border-color: var(--accent); color: var(--accent); }
+
+.error {
+  font-size: 11px;
+  color: var(--danger);
+}
+
+.examples {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.exLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.exBtn {
+  padding: 3px 8px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  font-size: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.exBtn:hover { border-color: var(--accent-dim); color: var(--text-secondary); }

@@ -1,0 +1,16 @@
+.row { display: flex; gap: 8px; }
+
+.btn {
+  flex: 1;
+  padding: 8px 10px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn:hover:not(:disabled) { border-color: var(--info); color: var(--info); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
