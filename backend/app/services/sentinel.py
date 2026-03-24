@@ -12,7 +12,7 @@ import io
 import logging
 from datetime import date
 from typing import Any, Dict, List, Optional, Tuple
-
+import json
 import httpx
 import numpy as np
 from PIL import Image
@@ -196,10 +196,11 @@ async def fetch_band_data(
         "Content-Type": "application/json",
         "Accept": "image/tiff",
     }
+    logger.info(f"Process API request payload: {json.dumps(payload)[:1000]}")
     async with httpx.AsyncClient(timeout=60) as client:
         resp = await client.post(PROCESS_API_URL, json=payload, headers=headers)
         logger.info(f"Process API response status: {resp.status_code}")
-        logger.info(f"Process API response body: {resp.text[:500]}")
+        logger.info(f"Process API response body: {resp.text[:1000]}")
         resp.raise_for_status()
         tiff_bytes = resp.content
 
