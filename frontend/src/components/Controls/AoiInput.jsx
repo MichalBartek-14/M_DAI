@@ -99,9 +99,9 @@ export default function AoiInput() {
 }
 
 const EXAMPLE_BBOXES = [
-  { label: 'Amsterdam', value: '4.72,52.27,5.08,52.47' },
-  { label: 'Loire Valley', value: '1.5,47.0,3.0,48.0' },
-  { label: 'Rhine Delta', value: '4.0,51.5,6.5,53.0' },
+  { label: 'Klenovec', value: '19.8,48.5,20.0,48.7' },
+  { label: 'Bratislava', value: '17.0,48.2,17.2,48.0' },
+  { label: 'Jasna', value: '48.8,19.5,49.0,19.7' },
 ]
 
 const DrawIcon = () => (
