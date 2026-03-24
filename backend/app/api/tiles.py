@@ -18,38 +18,51 @@ router = APIRouter()
 
 @router.get("/{index_name}/{z}/{x}/{y}.png")
 async def get_tile(
-    index_name: str  = Path(..., description="Index name, e.g. NDVI"),
-    z: int           = Path(..., ge=0, le=18),
-    x: int           = Path(...),
-    y: int           = Path(...),
-    start:  str      = Query(..., description="Start date YYYY-MM-DD"),
-    end:    str      = Query(..., description="End date YYYY-MM-DD"),
-    bbox:   str      = Query("auto", description="min_lon,min_lat,max_lon,max_lat"),
-    cloud:  int      = Query(30, ge=0, le=100),
-    res:    int      = Query(10, ge=10, le=60),
+        index_name: str = Path(..., description="Index name, e.g. NDVI"),
+        z: int = Path(..., ge=0, le=18),
+        x: int = Path(...),
+        y: int = Path(...),
+        start: str = Query(..., description="Start date YYYY-MM-DD"),
+        end: str = Query(..., description="End date YYYY-MM-DD"),
+        bbox: str = Query("auto", description="min_lon,min_lat,max_lon,max_lat"),
+        cloud: int = Query(30, ge=0, le=100),
+        res: int = Query(10, ge=10, le=60),
 ):
-    """
-    Render and return a 256×256 PNG tile for the requested index/zoom/tile.
-    Results are cached on disk for 24 h.
-    """
-    index_name = index_name.upper()
-    layer_key  = f"{index_name}_{start}_{end}_{bbox}_{cloud}"
+    import logging
+    logger = logging.getLogger(__name__)
 
-    # ── Cache hit ──────────────────────────────────────────────────────────
+    index_name = index_name.upper()
+    layer_key = f"{index_name}_{start}_{end}_{bbox}_{cloud}"
+
     if tile_exists(layer_key, z, x, y):
         data = tile_read(layer_key, z, x, y)
         if data:
             return Response(content=data, media_type="image/png",
                             headers={"Cache-Control": "public, max-age=86400"})
 
-    # ── Parse AOI from bbox param ──────────────────────────────────────────
     aoi = _bbox_to_aoi(bbox, z, x, y)
 
     try:
         start_date = date.fromisoformat(start)
-        end_date   = date.fromisoformat(end)
+        end_date = date.fromisoformat(end)
     except ValueError:
         raise HTTPException(400, "Invalid date format — use YYYY-MM-DD")
+
+    try:
+        png_bytes = await render_index_tile(
+            index_name=index_name,
+            aoi=aoi,
+            start_date=start_date,
+            end_date=end_date,
+            z=z, x=x, y=y,
+            resolution=res,
+        )
+        tile_write(layer_key, z, x, y, png_bytes)
+        return Response(content=png_bytes, media_type="image/png",
+                        headers={"Cache-Control": "public, max-age=86400"})
+    except Exception as e:
+        logger.error(f"Tile render error: {e}", exc_info=True)
+        raise HTTPException(500, f"Tile render failed: {str(e)}")
 
     # ── Render tile ────────────────────────────────────────────────────────
     png_bytes = await render_index_tile(

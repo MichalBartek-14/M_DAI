@@ -249,24 +249,39 @@ async def render_index_tile(
 ) -> bytes:
     """
     Fetch bands, compute index, apply colormap, return PNG tile bytes.
-    Falls back to synthetic demo data if credentials are not set.
+    Falls back to synthetic demo data if credentials are not set or API fails.
     """
-    evalscript = build_evalscript(index_name)
-    band_data = await fetch_band_data(
-        aoi, evalscript, start_date, end_date,
-        resolution=resolution, width=256, height=256,
-    )
+    try:
+        evalscript = build_evalscript(index_name)
+        band_data = await fetch_band_data(
+            aoi, evalscript, start_date, end_date,
+            resolution=resolution, width=256, height=256,
+        )
+    except Exception as e:
+        logger.warning(f"Band fetch failed, using demo data: {e}")
+        band_data = None
 
-    if band_data is None:
-        # Demo mode — generate plausible-looking data
+    try:
+        if band_data is None:
+            index_arr = generate_demo_index(index_name, 256, 256)
+        else:
+            bands = _unpack_bands(index_name, band_data)
+            index_arr = compute_index(index_name, bands)
+    except Exception as e:
+        logger.warning(f"Index compute failed, using demo data: {e}")
         index_arr = generate_demo_index(index_name, 256, 256)
-    else:
-        bands = _unpack_bands(index_name, band_data)
-        index_arr = compute_index(index_name, bands)
 
-    meta = INDEX_META[index_name.upper()]
-    return index_to_png(index_arr, meta["colormap"], meta["range"])
-
+    try:
+        meta = INDEX_META[index_name.upper()]
+        return index_to_png(index_arr, meta["colormap"], meta["range"])
+    except Exception as e:
+        logger.error(f"PNG render failed: {e}")
+        # Return a 1x1 transparent PNG as absolute fallback
+        import base64
+        transparent_png = base64.b64decode(
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+        )
+        return transparent_png
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
