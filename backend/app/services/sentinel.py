@@ -198,6 +198,8 @@ async def fetch_band_data(
     }
     async with httpx.AsyncClient(timeout=60) as client:
         resp = await client.post(PROCESS_API_URL, json=payload, headers=headers)
+        logger.info(f"Process API response status: {resp.status_code}")
+        logger.info(f"Process API response body: {resp.text[:500]}")
         resp.raise_for_status()
         tiff_bytes = resp.content
 
@@ -258,7 +260,7 @@ async def render_index_tile(
             resolution=resolution, width=256, height=256,
         )
     except Exception as e:
-        logger.warning(f"Band fetch failed, using demo data: {e}")
+        logger.error(f"BAND FETCH FAILED - using demo data. Error: {e}", exc_info=True)
         band_data = None
 
     try:
