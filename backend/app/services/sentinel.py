@@ -154,7 +154,7 @@ async def fetch_band_data(
 
     Returns None in demo mode (no valid credentials).
     """
-    token = await get_sentinelhub_token()
+    token = await get_sentinelhub_token(use_cdse=True)
     if not token:
         return None
 
