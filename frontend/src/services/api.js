@@ -50,14 +50,16 @@ export async function fetchIndexMeta() {
 // ── Compute index + get tile URL ────────────────────────────────────────────
 
 export async function computeIndex({ aoi, startDate, endDate, index, cloudCoverMax = 30, resolution = 10 }) {
-  const { data } = await api.post('/api/indices/compute', {
+  const body = {
     aoi: buildAoi(aoi),
     start_date: startDate,
     end_date: endDate,
     index,
     cloud_cover_max: cloudCoverMax,
     resolution,
-  })
+  }
+  console.log('Sending to API:', JSON.stringify(body))
+  const { data } = await api.post('/api/indices/compute', body)
   return data
 }
 
