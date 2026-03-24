@@ -166,7 +166,7 @@ async def fetch_band_data(
                 "properties": {"crs": "http://www.opengis.net/def/crs/EPSG/0/4326"},
             },
             "data": [{
-                "type": "S2L2A"
+                "type": "S2L2A",
                 "dataFilter": {
                     "timeRange": {
                         "from": f"{start_date.isoformat()}T00:00:00Z",
