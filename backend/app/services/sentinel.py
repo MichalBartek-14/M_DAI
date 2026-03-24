@@ -66,11 +66,15 @@ function setup() {{
   }};
 }}
 function evaluatePixel(sample) {{
-  // Cloud masking: SCL classes 3(shadow),8(cloud medium),9(cloud high),10(thin cirrus)
   if ([3,8,9,10].includes(sample.SCL)) {{
     return new Array({n_bands}).fill(NaN);
   }}
-  var {{B02, B03, B04, B08, B8A, B11}} = sample;
+  var B02 = sample.B02;
+  var B03 = sample.B03;
+  var B04 = sample.B04;
+  var B08 = sample.B08;
+  var B8A = sample.B8A;
+  var B11 = sample.B11;
   {return_stmt}
 }}
 """
@@ -94,9 +98,9 @@ async def search_scenes(
         "bbox": bbox,
         "datetime": f"{start_date.isoformat()}T00:00:00Z/{end_date.isoformat()}T23:59:59Z",
         "limit": max_items,
-        "filter": f"eo:cloud_cover <= {cloud_cover_max}",
-        "filter-lang": "cql2-text",
-        "sortby": "+datetime",
+        "sortby": [{"field": "datetime", "direction": "asc"}],
+        "filter": {"op": "lte", "args": [{"property": "eo:cloud_cover"}, cloud_cover_max]},
+        "filter-lang": "cql2-json",
     }
 
     async with httpx.AsyncClient(timeout=20) as client:
@@ -166,7 +170,7 @@ async def fetch_band_data(
                 "properties": {"crs": "http://www.opengis.net/def/crs/EPSG/0/4326"},
             },
             "data": [{
-                "type": "S2L2A",
+                "datasetId": "S2L2A",
                 "dataFilter": {
                     "timeRange": {
                         "from": f"{start_date.isoformat()}T00:00:00Z",
@@ -174,9 +178,6 @@ async def fetch_band_data(
                     },
                     "mosaickingOrder": "leastCC",
                     "maxCloudCoverage": 30,
-                },
-                "processing": {
-                    "harmonizeValues": True,
                 },
             }],
         },
@@ -194,7 +195,6 @@ async def fetch_band_data(
     headers = {
         **build_auth_headers(token),
         "Content-Type": "application/json",
-        "Accept": "image/tiff",
     }
     logger.info(f"Process API request payload: {json.dumps(payload)[:1000]}")
     async with httpx.AsyncClient(timeout=60) as client:
@@ -209,12 +209,15 @@ async def fetch_band_data(
 
 # ── Demo / fallback data ──────────────────────────────────────────────────────
 
-def generate_demo_index(index_name: str, width: int = 512, height: int = 512) -> np.ndarray:
+def generate_demo_index(index_name: str, width: int = 512, height: int = 512,
+                        tile_x: int = 0, tile_y: int = 0, tile_z: int = 0) -> np.ndarray:
+    seed = abs(hash(f"{tile_z}_{tile_x}_{tile_y}_{index_name}")) % (2**31)
+    rng = np.random.default_rng(seed)
     """
     Generate realistic-looking synthetic index data for UI demonstration
     when no API credentials are configured.
     """
-    rng = np.random.default_rng(42)
+
     meta = INDEX_META[index_name.upper()]
     lo, hi = meta["range"]
     centre = (lo + hi) * 0.45
@@ -266,7 +269,8 @@ async def render_index_tile(
 
     try:
         if band_data is None:
-            index_arr = generate_demo_index(index_name, 256, 256)
+            index_arr = generate_demo_index(index_name, 256, 256,
+                                            tile_x=x, tile_y=y, tile_z=z)
         else:
             bands = _unpack_bands(index_name, band_data)
             index_arr = compute_index(index_name, bands)
