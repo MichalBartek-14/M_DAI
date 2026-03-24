@@ -32,13 +32,13 @@ async def compute_index(body: IndexRequest):
 
     # Build the XYZ tile endpoint URL (consumed by the frontend map)
     tile_url = (
-        f"/api/tiles/{body.index.value}"
+        f"https://sentinel-dashboard-api.onrender.com/api/tiles/{body.index.value}"
+        f"/{{z}}/{{x}}/{{y}}.png"
         f"?start={body.start_date.isoformat()}"
         f"&end={body.end_date.isoformat()}"
         f"&bbox={_bbox_str(body.aoi)}"
         f"&cloud={body.cloud_cover_max}"
         f"&res={body.resolution}"
-        f"&z={{z}}&x={{x}}&y={{y}}"
     )
 
     # Generate quick stats from demo/cached data
