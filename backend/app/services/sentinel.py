@@ -158,9 +158,13 @@ async def fetch_band_data(
 
     Returns None in demo mode (no valid credentials).
     """
+    logger.info("fetch_band_data called — getting token")
     token = await get_sentinelhub_token(use_cdse=True)
+    logger.info(f"Token obtained: {bool(token)}")
     if not token:
+        logger.warning("No token — returning None")
         return None
+    logger.info("About to build payload and call Process API")
 
     bbox = _aoi_to_bbox(aoi)
     payload = {
